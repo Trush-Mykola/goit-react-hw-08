@@ -1,5 +1,6 @@
 import { createSelector, createSlice } from "@reduxjs/toolkit";
-import { fetchContacts, addContact, deleteContact } from "./contactsOps";
+import { fetchContacts, addContact, deleteContact } from "./operations";
+import { selectContacts, selectNameFilter } from "./selectors";
 
 const INITIAL_VALUES = {
   items: [],
@@ -42,11 +43,6 @@ const handelRejected = (state) => {
   state.loading = false;
   state.error = true;
 };
-
-export const selectContacts = (state) => state.contacts.items;
-export const selectNameFilter = (state) => state.filter.name;
-export const selectLoading = (state) => state.contacts.loading;
-export const selectError = (state) => state.contacts.error;
 
 export const selectFilteredContacts = createSelector([selectNameFilter, selectContacts], (filterContacts, contacts) =>
   contacts.filter((contact) => contact.name.toLowerCase().includes(filterContacts.trim().toLowerCase()) || contact.number.includes(filterContacts))

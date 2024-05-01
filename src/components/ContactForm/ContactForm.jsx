@@ -24,23 +24,25 @@ const ContactForm = () => {
   };
 
   return (
-    <Formik initialValues={initialValues} onSubmit={onSubmitHandle} validationSchema={ContactFormSchema}>
-      <Form className={css.form}>
-        <label htmlFor="name">
-          Name
-          <Field type="text" name="name" />
-          <ErrorMessage component="span" name="name" />
-        </label>
-        <label htmlFor="number">
-          Number
-          <Field type="text" name="number" />
-          <ErrorMessage component="span" name="number" />
-        </label>
-        <button type="submit" className={css.button}>
-          Add contact
-        </button>
-      </Form>
-    </Formik>
+    <div className={css.formDiv}>
+      <Formik initialValues={initialValues} onSubmit={onSubmitHandle} validationSchema={ContactFormSchema}>
+        <Form className={css.form}>
+          <label htmlFor="name">
+            Name
+            <Field type="text" name="name" />
+            <ErrorMessage component="span" name="name" />
+          </label>
+          <label htmlFor="number">
+            Number
+            <Field type="text" name="number" />
+            <ErrorMessage component="span" name="number" />
+          </label>
+          <button type="submit" className={css.button}>
+            Add contact
+          </button>
+        </Form>
+      </Formik>
+    </div>
   );
 };
 

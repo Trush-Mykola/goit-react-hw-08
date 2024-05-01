@@ -25,3 +25,7 @@ span {
 .button {
   margin-top: 10px;
 }
+.formDiv {
+  display: flex;
+  justify-content: center;
+}

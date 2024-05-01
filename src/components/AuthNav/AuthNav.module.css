@@ -1,0 +1,13 @@
+.NavLink {
+  text-decoration: none;
+  color: black;
+  padding: 20px;
+  background-color: transparent;
+  transition: all 0.3s ease-in-out;
+}
+.active {
+  background-color: black;
+  color: white;
+  border: 1px solid whitesmoke;
+  border-radius: 4px;
+}

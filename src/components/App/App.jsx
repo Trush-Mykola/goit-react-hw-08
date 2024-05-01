@@ -1,69 +1,62 @@
-import ContactList from "../ContactList/ContactList";
-import SearchBox from "../SearchBox/SearchBox";
-import ContactForm from "../ContactForm/ContactForm";
-
-import css from "./App.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
-
-// import { selectError, selectLoading } from "../../redux/contacts/slice";
-import Layout from "../Layout/Layout";
+import { Suspense, lazy, useEffect } from "react";
 import { Route, Routes } from "react-router-dom";
-import HomePage from "../../pages/HomePage";
-import RegistrationPage from "../../pages/RegistrationPage";
-import LoginPage from "../../pages/LoginPage";
-import ContactsPage from "../../pages/ContactsPage";
-import NotFoundPage from "../../pages/NotFoundPage";
 import { refreshUser } from "../../redux/auth/operations";
+import { selectIsRefreshing } from "../../redux/auth/selectors";
+
 import RestrictedRoute from "../RestrictedRoute/RestrictedRoute";
 import PrivateRoute from "../PrivateRoute/PrivateRoute";
 
+import Layout from "../Layout/Layout";
+const HomePage = lazy(() => import("../../pages/HomePage"));
+const RegistrationPage = lazy(() => import("../../pages/RegistrationPage"));
+const LoginPage = lazy(() => import("../../pages/LoginPage"));
+const ContactsPage = lazy(() => import("../../pages/ContactsPage"));
+const NotFoundPage = lazy(() => import("../../pages/NotFoundPage"));
+
+import css from "./App.module.css";
+
 const App = () => {
   const dispatch = useDispatch();
-  // const isLoading = useSelector(selectLoading);
-  // const isError = useSelector(selectError);
+  const isRefreshing = useSelector(selectIsRefreshing);
 
   useEffect(() => {
     dispatch(refreshUser());
   }, [dispatch]);
+
+  if (isRefreshing) return <div>...Loading</div>;
   return (
     <Layout>
-      <Routes>
-        <Route path="/" element={<HomePage />} />
-        <Route
-          path="/register"
-          element={
-            <RestrictedRoute>
-              <RegistrationPage />
-            </RestrictedRoute>
-          }
-        />
-        <Route
-          path="/login"
-          element={
-            <RestrictedRoute>
-              <LoginPage />
-            </RestrictedRoute>
-          }
-        />
-        <Route
-          path="/contacts"
-          element={
-            <PrivateRoute>
-              <ContactsPage />
-            </PrivateRoute>
-          }
-        />
-        <Route path="*" element={<NotFoundPage />} />
-        {/* <div className={css.wrapper}>
-        <h1>Phonebook</h1>
-        <ContactForm />
-        <SearchBox />
-        {isLoading && <h2>Loading...</h2>}
-        {isError && <h2>Sorry, something get wrong, try reload the page</h2>}
-        <ContactList />
-      </div> */}
-      </Routes>
+      <Suspense fallback={<div>...Loading</div>}>
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route
+            path="/register"
+            element={
+              <RestrictedRoute>
+                <RegistrationPage />
+              </RestrictedRoute>
+            }
+          />
+          <Route
+            path="/login"
+            element={
+              <RestrictedRoute>
+                <LoginPage />
+              </RestrictedRoute>
+            }
+          />
+          <Route
+            path="/contacts"
+            element={
+              <PrivateRoute>
+                <ContactsPage />
+              </PrivateRoute>
+            }
+          />
+          <Route path="*" element={<NotFoundPage />} />
+        </Routes>
+      </Suspense>
     </Layout>
   );
 };
